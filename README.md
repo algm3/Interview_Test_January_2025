@@ -116,7 +116,7 @@ next tasks.
 
 ### 4. Implement inverting relations
 
-Add code that finds the inverse of a relation as described in the
+Add code that computes the inverse of a relation as described in the
 [Introduction](#introduction) section.
 
 ### 5. Implement combining relations

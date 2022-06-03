@@ -96,10 +96,10 @@ or doc strings as you go.
 ### 2. Ask one or more relevant questions
 
 Look briefly at the remaining tasks to determine which of them seem
-difficult or perhaps need more clarification. Then ask us by email at
-least one question that will help you to solve the tasks better and/or
-more easily. We will try to respond quickly, but please do not delay
-this task until just before the deadline.
+difficult or perhaps need more clarification. Then ask us by email *at
+least* one question that will help you to solve the tasks better
+and/or more easily. We will try to respond quickly, but please do not
+delay this task until just before the deadline.
 
 ### 3. Fix a bug
 
@@ -136,12 +136,23 @@ adds these indirect relationships.
 All this code should run with Python 3 on an ordinary PC or
 server. CPU and memory requirements should be modest.
 
+You should be aware that this test tries to mimick a common work
+situation where you have to take over some unfinished code written by
+a colleague and enhance it with more functionality. For the second
+task you should imagine you're communicating with that colleague and
+that you both have an interest in getting all the tasks solved
+correctly and easily. The imaginary colleague may already have looked
+into the tasks and may not only have thoughts about the challenges and
+pitfalls in the tasks, but also how these challenges can be addressed.
+
 We are aware that some of the tasks are difficult and potential time
 consuming. However, if you ask the right questions in task 2, it may
 save you several hours of work.
 
 You are welcome to search the Internet for help, but we will expect
-you to be able to explain the code that you come up with.
+you to be able to explain the code that you come up with. Determining
+how well we can explain things to each other is a major part of the
+test.
 
 Also, we will kindly ask you not to actively make other people aware
 of this test, as we would like to use it for future interviews.

@@ -93,7 +93,15 @@ classes, `GO_category` and `GO_relation`.
 Try to understand what the code does. It may help to add some comments
 or doc strings as you go.
 
-### 2. Fix a bug
+### 2. Ask one or more relevant questions
+
+Look briefly at the remaining tasks to determine which of them seem
+difficult or perhaps need more clarification. Then ask us by email at
+least one question that will help you to solve the tasks better and/or
+more easily. We will try to respond quickly, but please do not delay
+this task until just before the deadline.
+
+### 3. Fix a bug
 
 The file `test_GO.py` defines a number of functions that can be used
 to test the code in `GO.py`. You can run the tests using the Python
@@ -106,17 +114,17 @@ other GO categories, but for some reason no relationships are are
 stored in our data structure. Fix this bug before proceeding to the
 next tasks.
 
-### 3. Implement inverting relations
+### 4. Implement inverting relations
 
 Add code that finds the inverse of a relation as described in the
 [Introduction](#introduction) section.
 
-### 4. Implement combining relations
+### 5. Implement combining relations
 
 Add code that creates a new relation by combining two others as
 described in the [Introduction](#introduction) section.
 
-### 5. Implement making a relation transitive
+### 6. Implement making a relation transitive
 
 As was described in the [Introduction](#introduction) section, the
 `is_a` relation is transitive, but all the indirect relationships are
@@ -128,9 +136,9 @@ adds these indirect relationships.
 All this code should run with Python 3 on an ordinary PC or
 server. CPU and memory requirements should be modest.
 
-We are aware that some of the tasks are difficult and time
-consuming. We will not be surprised if you need to put several hours
-of work into solving them.
+We are aware that some of the tasks are difficult and potential time
+consuming. However, if you ask the right questions in task 2, it may
+save you several hours of work.
 
 You are welcome to search the Internet for help, but we will expect
 you to be able to explain the code that you come up with.

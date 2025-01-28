@@ -1,8 +1,38 @@
 #!/usr/bin/env python3
         
 class GO:
+    ''' A class to represent GO ojects.
+
+        Attributes
+        ----------
+        categories: dictionary with GO id as key and GO_category objects 
+                    as values
+        relations:  dictionary with 'typedef' (e.g., is_a) as key 
+                    and GO_relation objects as values
+
+        Methods
+        -------
+        _read(self, filename):
+            reads the Gene Ontology database file
+        
+        _init_relations(self):
+            initializes the relations
+    '''
+
     def __init__(self, filename):
+        ''' Initiate the Go object
+        
+            Constructs all the necessary instance attributes for the GO object
+            and runs '_read' and '_init_relations' methods.
+
+            Parameters
+            ----------
+            filename: name of the Gene Ontology database file
+        '''
+
         self.categories = {}
+        # adds the is_a relation to the object cause it is not
+        # as a '[Typedef]' in the go.obo file
         self.relations = {
             'is_a': GO_relation({'id': ['is_a'],
                                  'name': ['is_a'],
@@ -11,7 +41,18 @@ class GO:
         self._read(filename)
         self._init_relations()
     
+
     def _read(self, filename):
+        ''' Reads the Gene Ontology database file.
+            
+            Creating key (category id), value (Go_category objects) pairs for the categories dictionary.
+            Creating key (relationship id), value (Go_relation objects) pairs for the relations dictionary.
+        
+            Parameters
+            ----------
+            filename: name of the Gene Ontology database file
+        '''
+
         with open(filename, 'r') as f:
             section = ''
             attributes = {}
@@ -27,6 +68,7 @@ class GO:
                     attributes.clear()
                     section = ''
                 elif line.startswith('[') and line.endswith(']'):
+                    # sets section to either 'Term' or 'Typedef'
                     section = line[1:-1]
                 else:
                     k, v = line.split(': ', 1)
@@ -36,7 +78,20 @@ class GO:
                         attributes[k] = [ v ]
 
     def _init_relations(self):
+        ''' Initiate the relations of the GO_relation 'pairs' attribute
+
+            We have already read the file and filled the categories and relations 
+            dictionaries. Now we need to add the relations that are in the GO_categories
+            'others' attribute to the 'pairs' attribute of the GO_relation object.
+            This can be a 'is_a' relation but also other relationship types (e.g., part of)
+
+            Pairs is a dictionary with GO_category id as key and 
+            another GO_category id as value. 
+        '''
+       
+        # get the GO_relation object for 'is_a'           
         is_a = self.relations['is_a']
+        # category is a Go_category object
         for go, category in self.categories.items():
             if 'is_a' in category.others:
                 for value in category.others['is_a']:
@@ -44,15 +99,24 @@ class GO:
                     other_category = self.categories[other_go]
                     is_a.add_pair(category, other_category)
                 del category.others['is_a']
+            # adds pairs of other relationship types to relations attribute
             if 'relationship' in category.others:
                 for value in category.others['relationship']:
                     rel, other_go, _ = value.split(' ', 2)
+                    # get the GO_category oject for other category
                     other_category = self.categories[other_go]
                     self.relations[rel].add_pair(category, other_category)
                 del category.others['relationship']
 
 
 def _pop_single_value(k, values):
+    ''' Pops a single entry from the dict accoring to key.
+
+        parses through dict that is passed to the function and returns
+        the value for the key (k) and then deletes the entry from the dict.
+        Similar to the pop() method. 
+    '''
+
     if len(values[k]) != 1:
         raise ValueError('There must be exactly one element in values.')
     value = values[k][0]
@@ -61,7 +125,33 @@ def _pop_single_value(k, values):
 
 
 class GO_category:
+    ''' A class to represent GO category objects
+
+        Attributes
+        ----------
+            id:         id of the GO category
+            name:       name of the GO category
+            definition: description of the GO category function
+            others:     further attributes of the GO category
+
+        Methods
+        -------
+        __repr__(self):
+            returning a representation of the class.
+        
+        __lt__(self, other):
+            Compares the id attributes of two ojects and
+            defines the behavior of the < operator for objects
+    '''
+
     def __init__(self, attributes):
+        '''Initiate the Go_category object
+
+            Parameters
+            ----------
+            attributes: dictionary of attributes
+        '''
+
         self.id = _pop_single_value('id', attributes)
         self.name = _pop_single_value('name', attributes)
         self.definition = _pop_single_value('def', attributes)
@@ -75,7 +165,55 @@ class GO_category:
 
     
 class GO_relation:
+    ''' A class to represent GO relation objects
+
+        Attributes
+        ----------
+            id:             id of the GO relation
+            name:           name of the GO relation
+            is_transitive:  boolean value if relation is transitive
+            others:         further attributes of the GO relation
+            pairs:          dictionary of relationship pairs with 
+                            'typedef' (e.g., is_a) as key
+
+        Methods
+        -------
+        __repr__(self):
+            returning a representation of the class in form of the
+            Go relation id. 
+
+        add_pair(self, category1, category2):
+            adds a relationship pair (i.e. pair of categories) to the
+            pairs attribute (dictionary)
+
+        __contains__(self, pair):
+            defines the behavior for the in operator.
+            Working on the pairs attribute
+
+        __getitem__(self, category):
+            defines how an object retrieves an item using the square bracket notation ([])
+            Working on the pairs attribute
+
+        __iter__(self):
+            function returns an iterator for the pairs attribute
+
+        copy(self):
+            creates a new instance of the class and copies the attributes 
+            and relationships from the current instance to the new one
+        
+        __eq__(self, other):
+            Takes two relation ojects and compares if their attributes 
+            are the same. Returns tuple of boolean values.
+    '''
+
     def __init__(self, attributes):
+        ''' Initiate the Go_relation object
+
+            Parameters
+            ----------
+            attributes: dictionary of attributes
+        '''
+
         attributes = attributes.copy()
         self.id = _pop_single_value('id', attributes)
         self.name = _pop_single_value('name', attributes)
@@ -92,6 +230,7 @@ class GO_relation:
             raise TypeError('category1 must be a GO_category.')
         if not isinstance(category2, GO_category):
             raise TypeError('category2 must be a GO_category.')
+ 
         try:
             self.pairs[category1].add(category2)
         except KeyError:

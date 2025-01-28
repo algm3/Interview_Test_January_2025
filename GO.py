@@ -152,6 +152,11 @@ class GO_category:
             attributes: dictionary of attributes
         '''
 
+        # found the bug. We needed to copy the attributes.
+        # this ensures that the GO_category has it's own set of
+        # attributes. It also prevents the attributes to be manipulated
+        # later in the code. 
+        attributes = attributes.copy()
         self.id = _pop_single_value('id', attributes)
         self.name = _pop_single_value('name', attributes)
         self.definition = _pop_single_value('def', attributes)
@@ -230,7 +235,6 @@ class GO_relation:
             raise TypeError('category1 must be a GO_category.')
         if not isinstance(category2, GO_category):
             raise TypeError('category2 must be a GO_category.')
- 
         try:
             self.pairs[category1].add(category2)
         except KeyError:
@@ -274,3 +278,5 @@ class GO_relation:
                 self.is_transitive == other.is_transitive and
                 self.others == other.others and
                 self.pairs == other.pairs)
+
+    # TODO invert function

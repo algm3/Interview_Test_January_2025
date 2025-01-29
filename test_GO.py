@@ -133,4 +133,24 @@ def test_invert_2():
     rel='part_of'
     output = go.relations[rel].invert_rel(category1, category2)
     assert output == [category2, category1]
-    
+
+def test_combine_two_relations():
+    go = GO.GO('go.obo')
+    rel1 = 'is_a'
+    rel2 = 'part_of'
+    new_relation='myrel'
+    category=go.categories['GO:0000022']
+    go.combine_two_relations(category, rel1, rel2, new_relation='myrel')
+    assert len(go.relations[new_relation][category]) == 4
+
+def test_combine_specific_relations():
+    # currently only works if not same keys in
+    # input dictionary
+    go = GO.GO('go.obo')
+    to_comb = {'is_a': 'GO:0051231',
+                'part_of': 'GO:0000070'
+    }
+    new_relation='myrel'
+    category=go.categories['GO:0000022']
+    go.combine_specific_relations(category, to_comb, new_relation='myrel')
+    assert len(go.relations[new_relation][category]) == len(to_comb)

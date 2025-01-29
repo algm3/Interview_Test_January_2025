@@ -17,6 +17,18 @@ class GO:
         
         _init_relations(self):
             initializes the relations
+        
+        invert(self, category1, category2, relation='part_of'):
+            Simple function to revert relationship
+            (Solution 1 for task 4)
+        
+        combine_two_relations(self, category, rel1, rel2, new_relation='myrel'):
+            Combines two relations into new relation
+            (Solution 1 for task 5)
+        
+        combine_specific_relations(self, category, to_combine, new_relation='myrel'):
+            Combines specific relations instances
+            (Solution 2 for task 5)
     '''
 
     def __init__(self, filename):
@@ -140,6 +152,78 @@ class GO:
             print("{} and {} are not related through '{}'".format(category2, category1, relation))
 
 
+    # Task 5 Implement combining relations (solution 1)
+    # Combines two relationship classes into a new one
+    def combine_two_relations(self, category, rel1, rel2, new_relation='myrel'):
+        ''' Combines two relations into new relation
+
+            Combines all the GO_category entries of the passed relations and 
+            saves it as new realtion.
+
+            Parameters
+            ----------
+            category:       GO_category object of category to combine relation for
+            rel1:           name of relation that should be combined
+            rel2:           name of other relation that should be combined
+            new_relation:   name of new realation
+        '''
+        # check if category is a GO_category object
+        if not isinstance(category, GO_category):
+            raise TypeError('category must be a GO_category.')
+
+        # create new relation type in relations attribute
+        self.relations.update({new_relation: GO_relation({'id': [new_relation],
+                                                    'name': [new_relation],
+                                                    'is_transitive': [False]})
+        })
+
+        relation1_rels=self.relations[rel1][category]
+        relation2_rels=self.relations[rel2][category]
+        combined_rels=relation1_rels.union(relation2_rels)
+
+        self.relations[new_relation].pairs[category] = combined_rels
+    
+        
+
+    # Task 5 Implement combining specific relations (solution 2)
+    # similar to the combine_two_relations function
+    # but handles specific G0 categories and their relation as input
+    # TODO currently not working when there is two relations with the same 
+    # relation type (e.g., 'is_a') in the input dictionary
+    def combine_specific_relations(self, category, to_combine, new_relation='myrel'):
+        ''' Combines specific relations instances
+
+            Combines specific GO_categories of relations and 
+            saves it as new realtion.
+
+            Parameters
+            ----------
+            category:       GO_category object of category to combine relations for
+            to_combine:     dictionary with Typedef id (e.g., 'is_a') as keys and 
+                            GO id (e.g., "GO:0000022") as values
+            new_relation:   name of new realation
+
+        '''
+
+        # TODO check if to_combine has the right input format
+ 
+        # create new relation type in relations attribute
+        self.relations.update({new_relation: GO_relation({'id': [new_relation],
+                                                    'name': [new_relation],
+                                                    'is_transitive': [False]})
+        })
+
+        combined_rels= set()
+
+        # loop over input dictionary
+        for r, c in to_combine.items():
+            tmp_category=self.categories[c]
+            if tmp_category in self.relations[r][category]:
+                combined_rels.add(tmp_category)
+
+        self.relations[new_relation].pairs[category] = combined_rels
+
+
 def _pop_single_value(k, values):
     ''' Pops a single entry from the dict accoring to key.
 
@@ -240,6 +324,10 @@ class GO_relation:
         __eq__(self, other):
             Takes two relation ojects and compares if their attributes 
             are the same. Returns tuple of boolean values.
+        
+        invert_rel(self, category1, category2, relation='part_of'):
+             Simple function to revert relationship
+             (Solution 2 for task 4)
     '''
 
     def __init__(self, attributes):
@@ -314,6 +402,8 @@ class GO_relation:
     # potential solution2
     # Placing the function here makes calling it more layered
     # e.g., go.relations[rel].invert_rel(category1, category2)
+    # TODO I don't think we need to pass a relation with this fuction
+    # as we can just refer to the instance relation as self.id (change function)
     def invert_rel(self, category1, category2, relation='part_of'):
         ''' Simple function to revert relationship
 
@@ -342,3 +432,4 @@ class GO_relation:
             return [category2, category1]
         else:
             print("{} and {} are not related through '{}'".format(category2, category1, relation))
+

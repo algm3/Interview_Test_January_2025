@@ -117,3 +117,20 @@ def test_GO_1():
 def test_GO_2():
     go = GO.GO('go.obo')
     assert len(go.relations['is_a'][go.categories['GO:0000022']]) == 2
+
+def test_invert():
+    go = GO.GO('go.obo')
+    category1=go.categories['GO:0000022']
+    category2=go.categories['GO:0000070']
+    rel='part_of'
+    output = go.invert(category1, category2, rel)
+    assert output == [category2, category1]
+
+def test_invert_2():
+    go = GO.GO('go.obo')
+    category1=go.categories['GO:0000022']
+    category2=go.categories['GO:0000070']
+    rel='part_of'
+    output = go.relations[rel].invert_rel(category1, category2)
+    assert output == [category2, category1]
+    

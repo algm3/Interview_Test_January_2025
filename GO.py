@@ -108,6 +108,37 @@ class GO:
                     self.relations[rel].add_pair(category, other_category)
                 del category.others['relationship']
 
+    # Task 4 Implement inverting relations
+    # potential solution1
+    # Placing the function here makes calling it more straight forward
+    # e.g., go.invert(category1, category2, relation)
+    def invert(self, category1, category2, relation='part_of'):
+        ''' Simple function to revert relationship
+
+            Parameters
+            ----------
+            category1:  GO_category object of Go term to check relation for
+            category2:  GO_category object of GO term to check if it is in
+                        relation to category 1
+            relation:   which type of relation to check
+
+            Returns
+            -------
+            list
+                list of two G0_category objects that indicates switched relation.
+                e.g., [category2, category1] 
+        '''
+
+        if not isinstance(category1, GO_category):
+            raise TypeError('category1 must be a GO_category.')
+        if not isinstance(category2, GO_category):
+            raise TypeError('category2 must be a GO_category.')
+        
+        if category2 in self.relations[relation][category1]:
+            return [category2, category1]
+        else:
+            print("{} and {} are not related through '{}'".format(category2, category1, relation))
+
 
 def _pop_single_value(k, values):
     ''' Pops a single entry from the dict accoring to key.
@@ -278,5 +309,36 @@ class GO_relation:
                 self.is_transitive == other.is_transitive and
                 self.others == other.others and
                 self.pairs == other.pairs)
+    
+    # Task 4 Implement inverting relations
+    # potential solution2
+    # Placing the function here makes calling it more layered
+    # e.g., go.relations[rel].invert_rel(category1, category2)
+    def invert_rel(self, category1, category2, relation='part_of'):
+        ''' Simple function to revert relationship
 
-    # TODO invert function
+            Parameters
+            ----------
+            category1:  GO_category object of Go term to check relation for
+            category2:  GO_category object of GO term to check if it is in
+                        relation to category 1
+            relation:   which type of relation to check
+
+            Returns
+            -------
+            list
+                list of two G0_category objects that indicates switched relation.
+                e.g., [category2, category1] 
+        '''
+
+        if not isinstance(category1, GO_category):
+            raise TypeError('category1 must be a GO_category.')
+        if not isinstance(category2, GO_category):
+            raise TypeError('category2 must be a GO_category.')
+        
+        # need to use __contains__ as we are manipulating the 'in'
+        # operators behaviour beforehand
+        if self.pairs[category1].__contains__(category2):
+            return [category2, category1]
+        else:
+            print("{} and {} are not related through '{}'".format(category2, category1, relation))

@@ -433,3 +433,9 @@ class GO_relation:
         else:
             print("{} and {} are not related through '{}'".format(category2, category1, relation))
 
+
+### TASK 6 ###
+# Unfortunatley I didn't get far with Task 6 in the time I had
+# but I will be working on this task until Friday so we can 
+# discuss it more. 
+

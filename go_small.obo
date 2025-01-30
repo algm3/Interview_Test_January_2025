@@ -1,0 +1,100 @@
+
+[Term]
+id: GO:0000022
+name: mitotic spindle elongation
+namespace: biological_process
+def: "The cell cycle process in which the distance is lengthened between poles of the mitotic spindle. Mitotic spindle elongation begins during mitotic prophase and ends during mitotic anaphase B." [GOC:mtg_cell_cycle, GOC:vw]
+synonym: "spindle elongation during mitosis" EXACT []
+is_a: GO:0051231 ! spindle elongation
+is_a: GO:1903047 ! mitotic cell cycle process
+intersection_of: GO:0051231 ! spindle elongation
+intersection_of: part_of GO:0000278 ! mitotic cell cycle
+#relationship: part_of GO:0000070 ! mitotic sister chromatid segregation
+#relationship: part_of GO:0007052 ! mitotic spindle organization
+
+[Term]
+id: GO:0051231
+name: spindle elongation
+namespace: biological_process
+def: "The cell cycle process in which the distance is lengthened between poles of the spindle." [GOC:ai]
+is_a: GO:0007017 ! microtubule-based process
+is_a: GO:0022402 ! cell cycle process
+#relationship: part_of GO:0007051 ! spindle organization
+#relationship: part_of GO:0098813 ! nuclear chromosome segregation
+
+[Term]
+id: GO:1903047
+name: mitotic cell cycle process
+namespace: biological_process
+def: "A process that is part of the mitotic cell cycle." [GO_REF:0000060, GOC:mtg_cell_cycle, GOC:TermGenie]
+subset: gocheck_do_not_annotate
+is_a: GO:0022402 ! cell cycle process
+intersection_of: GO:0009987 ! cellular process
+intersection_of: part_of GO:0000278 ! mitotic cell cycle
+#relationship: part_of GO:0000278 ! mitotic cell cycle
+created_by: jl
+creation_date: 2014-05-22T14:22:34Z
+
+[Term]
+id: GO:0022402
+name: cell cycle process
+namespace: biological_process
+def: "The cellular process that ensures successive accurate and complete genome replication and chromosome segregation." [GOC:isa_complete, GOC:mtg_cell_cycle]
+subset: gocheck_do_not_annotate
+is_a: GO:0009987 ! cellular process
+intersection_of: GO:0009987 ! cellular process
+intersection_of: part_of GO:0007049 ! cell cycle
+#relationship: part_of GO:0007049 ! cell cycle
+
+[Term]
+id: GO:0007017
+name: microtubule-based process
+namespace: biological_process
+def: "Any cellular process that depends upon or alters the microtubule cytoskeleton, that part of the cytoskeleton comprising microtubules and their associated proteins." [GOC:mah]
+subset: goslim_chembl
+is_a: GO:0009987 ! cellular process
+
+[Term]
+id: GO:0009987
+name: cellular process
+namespace: biological_process
+alt_id: GO:0008151
+alt_id: GO:0044763
+alt_id: GO:0050875
+def: "Any process that is carried out at the cellular level, but not necessarily restricted to a single cell. For example, cell communication occurs among more than one cell, but occurs at the cellular level." [GOC:go_curators, GOC:isa_complete]
+subset: goslim_plant
+synonym: "cell growth and/or maintenance" NARROW []
+synonym: "cell physiology" EXACT []
+synonym: "cellular physiological process" EXACT []
+synonym: "single-organism cellular process" RELATED []
+is_a: GO:0008150 ! biological_process
+disjoint_from: GO:0044848 ! biological phase
+created_by: janelomax
+creation_date: 2012-12-11T16:56:55Z
+
+[Term]
+id: GO:0008150
+name: biological_process
+namespace: biological_process
+alt_id: GO:0000004
+alt_id: GO:0007582
+alt_id: GO:0044699
+def: "A biological process represents a specific objective that the organism is genetically programmed to achieve. Biological processes are often described by their outcome or ending state, e.g., the biological process of cell division results in the creation of two daughter cells (a divided cell) from a single parent cell. A biological process is accomplished by a particular set of molecular functions carried out by specific gene products (or macromolecular complexes), often in a highly regulated manner and in a particular temporal sequence." [GOC:pdt]
+comment: Note that, in addition to forming the root of the biological process ontology, this term is recommended for use for the annotation of gene products whose biological process is unknown. When this term is used for annotation, it indicates that no information was available about the biological process of the gene product annotated as of the date the annotation was made; the evidence code "no data" (ND), is used to indicate this.
+subset: goslim_aspergillus
+subset: goslim_candida
+subset: goslim_chembl
+subset: goslim_generic
+subset: goslim_metagenomics
+subset: goslim_pir
+subset: goslim_plant
+subset: goslim_pombe
+subset: goslim_yeast
+synonym: "biological process" EXACT []
+synonym: "physiological process" EXACT []
+synonym: "single organism process" RELATED []
+synonym: "single-organism process" RELATED []
+xref: Wikipedia:Biological_process
+created_by: janelomax
+creation_date: 2012-09-19T15:05:24Z
+

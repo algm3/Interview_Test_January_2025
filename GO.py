@@ -29,6 +29,10 @@ class GO:
         combine_specific_relations(self, category, to_combine, new_relation='myrel'):
             Combines specific relations instances
             (Solution 2 for task 5)
+        
+        add_transitive(self, rel):
+            Adds transitive relations to GO_relation object
+            Solution for task 6
     '''
 
     def __init__(self, filename):
@@ -222,6 +226,102 @@ class GO:
                 combined_rels.add(tmp_category)
 
         self.relations[new_relation].pairs[category] = combined_rels
+
+    # Task 6
+    def add_transitive(self, rel):
+        ''' Adds transitive relations to GO_relation object
+
+            Parameters
+            ----------
+            rel:    GO_relation ID
+        '''
+
+        if self.relations[rel].is_transitive == False:
+            raise ValueError("The relation '{}' is not transitive".format(self.relations[rel].id))
+      
+        for c in self.categories.values():
+            #print("\nworking on {}".format(c.id))
+            results = set()
+            to_do = set()
+            go_copy = self.relations[rel].copy()
+
+            # initial fill of to_do
+            nextup = find_nextup(go_copy[c], c)
+            to_do.update(nextup)
+
+            # go through to_do
+            while len(to_do) > 0:
+                #get a category value
+                next_id = to_do.pop()
+
+                # check if next_id is already in results
+                if next_id in results:
+                    continue
+                else:
+                    results.add(next_id)
+                    next_cat = self.categories[next_id]
+                    # update to_do
+                    nextup = find_nextup(go_copy[next_cat], next_cat)
+                    to_do.update(nextup)
+
+            # Add transitive relataions to all categories above it
+            # if they don't exist yet
+            for r in results:
+                if self.categories[r] not in self.relations[rel][c]:
+                    self.relations[rel].add_pair(c, self.categories[r])
+
+# function for Task 6
+def find_nextup_lt(GO_rel, curr_cat):
+    ''' Find relations upwards the hierarchy 
+
+        I originally thought that the GO.ids follow a
+        numerical hierarchy but I do not think this is true
+        this is why I wrote find_nextup
+    
+        Parameters
+        ----------
+        GO_rel:     GO_relation object of current level
+        curr_cat:   GO_category object of current level
+    '''
+    lt_list=list()
+
+    while len(GO_rel) > 0:
+        next_cat = GO_rel.pop()
+        if next_cat < curr_cat:
+            print("{} < {}".format(next_cat.id, curr_cat.id))
+            lt_list.append(next_cat.id)
+        else:
+            print("{} > {}".format(next_cat.id, curr_cat.id))
+
+    if len(lt_list) != 0:
+        return lt_list
+    else:
+        print('Nothing to add')
+        # return emty list so it still works with set.add()
+        # even though there is nothing to add
+        return []
+
+# function for Task 6
+def find_nextup(GO_rel, curr_cat):
+    ''' Find relations upwards the hierarchy 
+
+        Parameters
+        ----------
+        GO_rel:     GO_relation object of current level
+        curr_cat:   GO_category object of current level
+    '''
+    lt_list=list()
+
+    while len(GO_rel) > 0:
+        next_cat = GO_rel.pop()
+        lt_list.append(next_cat.id)
+
+    if len(lt_list) != 0:
+        return lt_list
+    else:
+        # return emty list so it still works with set.add()
+        # even though there is nothing to add
+        return []
 
 
 def _pop_single_value(k, values):
@@ -432,10 +532,3 @@ class GO_relation:
             return [category2, category1]
         else:
             print("{} and {} are not related through '{}'".format(category2, category1, relation))
-
-
-### TASK 6 ###
-# Unfortunatley I didn't get far with Task 6 in the time I had
-# but I will be working on this task until Friday so we can 
-# discuss it more. 
-

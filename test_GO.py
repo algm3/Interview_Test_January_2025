@@ -154,3 +154,31 @@ def test_combine_specific_relations():
     category=go.categories['GO:0000022']
     go.combine_specific_relations(category, to_comb, new_relation='myrel')
     assert len(go.relations[new_relation][category]) == len(to_comb)
+
+
+def test_add_transitive_1():
+    go = GO.GO('go_small.obo')
+    cat1= "GO:0000022"
+    rel = 'is_a'
+    go.add_transitive(rel)
+    assert len(go.relations[rel][go.categories[cat1]]) == 6
+
+def test_add_transitive_2():
+    go = GO.GO('go_small.obo')
+    cat2 = "GO:0051231"
+    rel = 'is_a'
+    go.add_transitive(rel)
+    assert len(go.relations[rel][go.categories[cat2]]) == 4
+
+def test_add_transitive_3():
+    go = GO.GO('go_small.obo')
+    cat3 = "GO:1903047"
+    rel = 'is_a'
+    go.add_transitive(rel)
+    assert len(go.relations[rel][go.categories[cat3]]) == 3
+
+def test_add_transitive_4():
+    go = GO.GO('go.obo')
+    rel = 'occurs_in'
+    with pytest.raises(ValueError):
+        go.add_transitive(rel)
